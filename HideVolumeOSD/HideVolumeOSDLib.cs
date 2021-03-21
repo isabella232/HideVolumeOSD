@@ -32,16 +32,17 @@ namespace HideVolumeOSD
 		{
 			hWndInject = FindOSDWindow(true);
 
-			int count = 0;
+			int count = 1;
 
-			while (hWndInject == IntPtr.Zero && count < 5)
+			while (hWndInject == IntPtr.Zero && count < 9)
 			{
 				keybd_event((byte)Keys.VolumeUp, 0, 0, 0);
 				keybd_event((byte)Keys.VolumeDown, 0, 0, 0);
 
 				hWndInject = FindOSDWindow(true);
 
-				System.Threading.Thread.Sleep(1000);
+				// Quadratic backoff if the window is not found
+				System.Threading.Thread.Sleep(1000*(count^2));
 				count++;		
 			}
 
