@@ -19,6 +19,9 @@ namespace HideVolumeOSD
 		[DllImport("user32.dll", SetLastError = true)]
 		static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+        [DllImport("user32.dll")]
+        static extern bool IsWindow(IntPtr hWnd);
+
 		NotifyIcon ni;
 
 		IntPtr hWndInject = IntPtr.Zero;
@@ -118,6 +121,11 @@ namespace HideVolumeOSD
 
 		public void HideOSD()
 		{
+            if (!IsWindow(hWndInject))
+            {
+                Init();
+            }
+
 			ShowWindow(hWndInject, 6); // SW_MINIMIZE
 
 			if (ni != null)
@@ -126,6 +134,11 @@ namespace HideVolumeOSD
 
 		public void ShowOSD()
 		{
+            if (!IsWindow(hWndInject))
+            {
+                Init();
+            }
+
 			ShowWindow(hWndInject, 9); // SW_RESTORE
 
 			// show window on the screen
